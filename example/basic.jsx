@@ -1,11 +1,7 @@
 "use strict";
 
 import React from 'react';
-import _ from 'underscore';
-import underscoreDeepExtend from 'underscore-deep-extend';
 import Popover from '../src/popover';
-
-_.mixin({deepExtend: underscoreDeepExtend(_)});
 
 export default class Basic extends React.Component {
   constructor(props) {
@@ -30,7 +26,7 @@ export default class Basic extends React.Component {
   }
 
   render() {
-    let toggleButton = <button className="btn btn-lrg btn-success" onClick={this.toggleMenu}>Toggle Menu</button>
+    let toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>
 
     return (
       <div className="container">
@@ -45,7 +41,8 @@ export default class Basic extends React.Component {
           toggleButton={toggleButton}
           handleClick={this.toggleMenu}
           isOpen={this.state.isOpen}
-          position={this.state.position}>
+          position={this.state.position}
+          leftOffset={10}>
 
           <ul>
             <li>Menu Item One</li>

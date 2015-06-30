@@ -24,7 +24,8 @@ div.popover-menu {
     box-shadow: 0 2px 2px transparentize(black, .8);
     color: $popover-color;
     cursor: pointer;
-    display: none;
+    display: block;
+    visibility: hidden;
     overflow: show;
     z-index: 99999;
     position: absolute;
@@ -75,7 +76,7 @@ div.popover-menu {
     }
 
     &.show {
-      display: block;
+      visibility: visible;
     }
 
     ul {
@@ -102,5 +103,17 @@ div.container {
 
   select {
     margin-bottom: 150px;
+  }
+}
+
+div.form {
+  padding: 15px;
+
+  label {
+    display: block;
+  }
+
+  input {
+    width: 150px;
   }
 }

@@ -7,6 +7,11 @@ module.exports = {
       'webpack-dev-server/client?http://localhost:8080/',
       'webpack/hot/only-dev-server',
       './example/basic.jsx'
+    ],
+    'form': [
+      'webpack-dev-server/client?http://localhost:8080/',
+      'webpack/hot/only-dev-server',
+      './example/form.jsx'
     ]
   },
   output: {

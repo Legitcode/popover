@@ -11,7 +11,8 @@ div.popover-menu {
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
     color: #000;
     cursor: pointer;
-    display: none;
+    display: block;
+    visibility: hidden;
     overflow: show;
     z-index: 99999;
     position: absolute; }
@@ -43,7 +44,7 @@ div.popover-menu {
       font-size: 1.9em;
       pointer-events: none; }
     div.popover-menu section.popover-content.show {
-      display: block; }
+      visibility: visible; }
     div.popover-menu section.popover-content ul {
       list-style-type: none;
       margin: 0;
@@ -60,3 +61,10 @@ div.container {
   margin-top: 50px; }
   div.container select {
     margin-bottom: 150px; }
+
+div.form {
+  padding: 15px; }
+  div.form label {
+    display: block; }
+  div.form input {
+    width: 150px; }

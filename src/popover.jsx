@@ -37,7 +37,9 @@ export default class Popover extends React.Component {
   static defaultProps = {
     toggleButton: <button className="btn btn-lrg btn-success">Toggle Menu</button>,
     isOpen: false,
-    position: 'bottom'
+    position: 'bottom',
+    topOffset: 10,
+    horizontalJustify: 'left'
   }
 
   constructor(props) {
@@ -80,10 +82,10 @@ export default class Popover extends React.Component {
 
     switch(this.props.position) {
       case 'top':
-        offset = `-${this.popoverHeight + 10}px`;
+        offset = `-${this.popoverHeight + this.props.topOffset}px`;
         break;
       case 'bottom':
-        offset = `${this.buttonHeight + 10}px`;
+        offset = `${this.buttonHeight + this.props.topOffset}px`;
         break;
       case 'left':
         offset = '0px';
@@ -127,10 +129,8 @@ export default class Popover extends React.Component {
     });
 
     let contentClass = `popover-content ${this.props.position} ${this.props.isOpen ? 'show' : ''}`
-    let contentStyles = {
-      top: this.calculateTopOffset(),
-      left: this.calculateLeftOffset()
-    }
+    let contentStyles = { top: this.calculateTopOffset() }
+    contentStyles[this.props.horizontalJustify] = this.calculateLeftOffset();
 
     return (
       <div className="popover-menu">

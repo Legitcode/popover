@@ -1,0 +1,106 @@
+$popover-color: #000;
+$popover-description-color: lighten($popover-color, 40);
+$popover-border: 1px solid silver;
+$popover-background: #fff;
+$popover-background-hover: darken($popover-background, 3);
+$popover-inner-border: 1px solid lighten(silver, 20);
+$popover-height: 32px;
+$popover-padding: 1em;
+$popover-distance-from-menu: 40px;
+$popover-arrow-top-distance: 0;
+$base-border-radius: 3px;
+
+div.popover-menu {
+  text-align: center;
+  display: inline-block;
+  font-size: 0.8em;
+  position: relative;
+
+  section.popover-content {
+    padding: 0;
+    background: $popover-background;
+    border-radius: $base-border-radius;
+    border: $popover-border;
+    box-shadow: 0 2px 2px transparentize(black, .8);
+    color: $popover-color;
+    cursor: pointer;
+    display: none;
+    overflow: show;
+    z-index: 99999;
+    position: absolute;
+
+    &.bottom {
+      &:before {
+        top: -17px;
+        left: 15px;
+        content: "\25b4";
+        text-shadow: 0 -2px 2px transparentize(black, .7);
+      }
+    }
+
+    &.top {
+      &:before {
+        bottom: -13px;
+        left: 15px;
+        content: "\25be";
+        font-size: 1.6em;
+        text-shadow: 0 2px 2px transparentize(black, .7);
+      }
+    }
+
+    &.left {
+      &:before {
+        top: 0;
+        right: -5px;
+        content: "\25b8";
+        font-size: 1.6em;
+        text-shadow: 2px 0 2px transparentize(black, .7);
+      }
+    }
+
+    &.right {
+      &:before {
+        top: 0;
+        left: -8px;
+        content: "\25c2";
+        text-shadow: -2px 0 2px transparentize(black, .7);
+      }
+    }
+
+    &:before {
+      position: absolute;
+      color: $popover-background;
+      font-size: 1.9em;
+      pointer-events: none;
+    }
+
+    &.show {
+      display: block;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        padding: 5px 15px;
+        border-bottom: solid 1px lighten($popover-color, 80);
+        white-space: nowrap;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}
+
+div.container {
+  text-align: center;
+  margin-top: 50px;
+
+  select {
+    margin-bottom: 150px;
+  }
+}

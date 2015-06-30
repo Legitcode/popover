@@ -128,12 +128,13 @@ export default class Popover extends React.Component {
       ref: 'toggleButton'
     });
 
+    let popoverClass = `popover-menu ${this.props.className}`;
     let contentClass = `popover-content ${this.props.position} ${this.props.isOpen ? 'show' : ''}`
     let contentStyles = { top: this.calculateTopOffset() }
     contentStyles[this.props.horizontalJustify] = this.calculateLeftOffset();
 
     return (
-      <div className="popover-menu">
+      <div className={popoverClass}>
         {toggleButton}
         <section className={contentClass} style={contentStyles} ref="popover">
           {this.props.children}

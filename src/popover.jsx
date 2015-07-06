@@ -55,10 +55,10 @@ export default class Popover extends React.Component {
         offset = `${this.buttonHeight + this.props.topOffset}px`;
         break;
       case 'left':
-        offset = '0px';
+        offset = `${this.props.topOffset}px`;
         break;
       case 'right':
-        offset = '0px';
+        offset = `${this.props.topOffset}px`;
         break;
       default:
         offset = 0;

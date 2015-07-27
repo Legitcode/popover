@@ -12,6 +12,11 @@ module.exports = {
       'webpack-dev-server/client?http://localhost:8080/',
       'webpack/hot/only-dev-server',
       './example/form.jsx'
+    ],
+    'expandable': [
+      'webpack-dev-server/client?http://localhost:8080/',
+      'webpack/hot/only-dev-server',
+      './example/expanding.jsx'
     ]
   },
   output: {

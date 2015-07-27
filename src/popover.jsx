@@ -16,14 +16,15 @@ export default class Popover extends React.Component {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+
+    this.state = {
+      topOffset: 0,
+      leftOffset: 0
+    };
   }
 
   componentDidMount() {
-    this.buttonHeight = React.findDOMNode(this.refs.toggleButton).offsetHeight;
-    this.buttonWidth = React.findDOMNode(this.refs.toggleButton).offsetWidth;
-
-    this.popoverHeight = React.findDOMNode(this.refs.popover).offsetHeight;
-    this.popoverWidth = React.findDOMNode(this.refs.popover).offsetWidth;
+    this.calculateHeights();
 
     document.addEventListener('click', (ev) => {
       ev.stopPropagation();
@@ -37,6 +38,19 @@ export default class Popover extends React.Component {
     React.findDOMNode(this.refs.toggleButton).addEventListener('click', (ev) => {
       ev.stopPropagation();
       this.handleClick(this.props.isOpen);
+    });
+  }
+
+  calculateHeights() {
+    this.buttonHeight = React.findDOMNode(this.refs.toggleButton).offsetHeight;
+    this.buttonWidth = React.findDOMNode(this.refs.toggleButton).offsetWidth;
+
+    this.popoverHeight = React.findDOMNode(this.refs.popover).offsetHeight;
+    this.popoverWidth = React.findDOMNode(this.refs.popover).offsetWidth;
+
+    this.setState({
+      topOffset: this.calculateTopOffset(),
+      leftOffset: this.calculateLeftOffset()
     });
   }
 
@@ -97,8 +111,8 @@ export default class Popover extends React.Component {
 
     let popoverClass = `popover-menu ${this.props.className || ''}`;
     let contentClass = `popover-content ${this.props.position} ${this.props.isOpen ? 'show' : ''}`
-    let contentStyles = { top: this.calculateTopOffset() }
-    contentStyles[this.props.horizontalJustify] = this.calculateLeftOffset();
+    let contentStyles = { top: this.state.topOffset }
+    contentStyles[this.props.horizontalJustify] = this.state.leftOffset;
 
     return (
       <div className={popoverClass}>

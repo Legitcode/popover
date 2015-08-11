@@ -86,10 +86,10 @@ export default class Popover extends React.Component {
 
     switch(this.props.position) {
       case 'top':
-        offset = '0px';
+        offset = `${this.props.leftOffset}px`;
         break;
       case 'bottom':
-        offset = '0px';
+        offset = `${this.props.leftOffset}px`;
         break;
       case 'left':
         offset = `-${this.popoverWidth + this.props.leftOffset}px`;

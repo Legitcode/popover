@@ -1,6 +1,6 @@
 {
   "name": "reactable-popover",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Popovers for React",
   "main": "./lib/popover.js",
   "scripts": {

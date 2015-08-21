@@ -32,7 +32,8 @@ export default class Popover extends React.Component {
     });
 
     React.findDOMNode(this.refs.popover).addEventListener('click', (ev) => {
-      ev.stopPropagation();
+     if(this.props.stopPropagation === false) return
+     ev.stopPropagation();
     });
 
     React.findDOMNode(this.refs.toggleButton).addEventListener('click', (ev) => {

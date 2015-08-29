@@ -53,8 +53,8 @@ export default class Popover extends React.Component {
     });
   }
 
-  handleClick(value) {
-    this.props.handleClick(value);
+  handleClick(value, ev) {
+    this.props.handleClick(value, ev);
   }
 
   calculateTopOffset() {

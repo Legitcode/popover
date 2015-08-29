@@ -5,7 +5,6 @@ import React from 'react';
 export default class Popover extends React.Component {
   static defaultProps = {
     toggleButton: <button className="btn btn-lrg btn-success">Toggle Menu</button>,
-    isOpen: false,
     position: 'bottom',
     topOffset: 10,
     leftOffset: 0,
@@ -15,11 +14,10 @@ export default class Popover extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleClick = this.handleClick.bind(this);
-
     this.state = {
       topOffset: 0,
-      leftOffset: 0
+      leftOffset: 0,
+      isOpen: false
     };
   }
 
@@ -28,7 +26,7 @@ export default class Popover extends React.Component {
 
     document.addEventListener('click', (ev) => {
       ev.stopPropagation();
-      this.handleClick(true);
+      this.handleClick(true, ev);
     });
 
     React.findDOMNode(this.refs.popover).addEventListener('click', (ev) => {
@@ -38,7 +36,7 @@ export default class Popover extends React.Component {
 
     React.findDOMNode(this.refs.toggleButton).addEventListener('click', (ev) => {
       ev.stopPropagation();
-      this.handleClick(this.props.isOpen);
+      this.handleClick(this.props.isOpen, ev);
     });
   }
 

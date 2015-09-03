@@ -30,7 +30,7 @@ export default class Popover extends React.Component {
     if(this.props.closeOnOuterClick !== false){
       document.addEventListener('click', (ev) => {
         if(ev.target.dataset['popover']) return ev.stopImmediatePropagation();
-        this.setState({isOpen: false})
+        if(this.state.isOpen == true) this.setState({isOpen: false})
       });
     }
   }

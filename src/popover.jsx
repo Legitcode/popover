@@ -4,7 +4,7 @@ import React from 'react';
 
 export default class Popover extends React.Component {
   static defaultProps = {
-    toggleButton: <button className="btn btn-lrg btn-success">Toggle Menu</button>,
+    toggleButton: null,
     position: 'bottom',
     topOffset: 10,
     leftOffset: 0,
@@ -17,30 +17,34 @@ export default class Popover extends React.Component {
     this.state = {
       topOffset: 0,
       leftOffset: 0,
-      isOpen: false
+      isOpen: props.isOpen || false
     };
   }
 
+  componentWillReceiveProps(props){
+    if(props.isOpen != this.state.isOpen) this.setState({isOpen: props.isOpen})
+  }
+
   componentDidMount() {
-    this.calculateHeights();
+    if(this.state.isOpen) this.calculateHeights();
+    if(this.props.closeOnOuterClick !== false){
+      document.addEventListener('click', (ev) => {
+        if(ev.target.dataset['popover']) return ev.stopImmediatePropagation();
+        this.setState({isOpen: false})
+      });
+    }
+  }
 
-    document.addEventListener('click', (ev) => {
-      ev.stopPropagation();
-      this.handleClick(true, ev);
-    });
+  componentDidUpdate(prevProps, prevState){
+    if(this.state.isOpen && this.state.isOpen != prevState.isOpen) this.calculateHeights();
+  }
 
-    React.findDOMNode(this.refs.popover).addEventListener('click', (ev) => {
-     if(this.props.stopPropagation === false) return
-     ev.stopPropagation();
-    });
-
-    React.findDOMNode(this.refs.toggleButton).addEventListener('click', (ev) => {
-      ev.stopPropagation();
-      this.handleClick(this.props.isOpen, ev);
-    });
+  toggle = () => {
+    this.setState({isOpen: !this.state.isOpen})
   }
 
   calculateHeights() {
+    if(!this.state.isOpen) return true
     this.buttonHeight = React.findDOMNode(this.refs.toggleButton).offsetHeight;
     this.buttonWidth = React.findDOMNode(this.refs.toggleButton).offsetWidth;
 
@@ -51,10 +55,6 @@ export default class Popover extends React.Component {
       topOffset: this.calculateTopOffset(),
       leftOffset: this.calculateLeftOffset()
     });
-  }
-
-  handleClick(value, ev) {
-    this.props.handleClick(value, ev);
   }
 
   calculateTopOffset() {
@@ -104,21 +104,39 @@ export default class Popover extends React.Component {
   }
 
   render() {
-    let toggleButton = React.cloneElement(this.props.toggleButton, {
-      ref: 'toggleButton'
-    });
+    if(this.props.toggleButton){
+      var toggleButton = React.cloneElement(this.props.toggleButton, {
+        ref: 'toggleButton',
+        'data-popover': true,
+        onClick: this.toggle
+      });
+    }
+    else {
+      var toggleButton = (
+        <div
+          style={{display: 'none'}}
+          onClick={this.toggle}
+          data-popover="true"
+          ref="toggleButton"
+        />
+      )
+    }
 
-    let popoverClass = `popover-menu ${this.props.className || ''}`;
-    let contentClass = `popover-content ${this.props.position} ${this.props.isOpen ? 'show' : ''}`
     let contentStyles = { top: this.state.topOffset }
     contentStyles[this.props.horizontalJustify] = this.state.leftOffset;
 
     return (
-      <div className={popoverClass}>
+      <div className={`popover-menu ${this.props.className || ''}`}>
         {toggleButton}
-        <section className={contentClass} style={contentStyles} ref="popover">
-          {this.props.children}
-        </section>
+        {this.state.isOpen ?
+          <section
+            className={`popover-content ${this.props.position} show`}
+            style={contentStyles}
+            onClick={this.toggle}
+            ref='popover'>
+            {this.props.children}
+          </section>
+          : null}
       </div>
     )
   }

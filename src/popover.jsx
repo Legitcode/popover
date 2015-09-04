@@ -1,5 +1,3 @@
-"use strict";
-
 import React from 'react';
 
 export default class Popover extends React.Component {
@@ -26,27 +24,25 @@ export default class Popover extends React.Component {
   }
 
   componentDidMount() {
-    if(this.state.isOpen) this.calculateHeights();
+    if(this.state.isOpen) this.calculateDimensions();
+
     if(this.props.closeOnOuterClick !== false){
       document.addEventListener('click', (ev) => {
         if(ev.target.dataset['popover']) return ev.stopImmediatePropagation();
         if(this.state.isOpen == true) this.setState({isOpen: false})
       });
     }
-    let topOffset = React.findDOMNode(this.refs.toggleButton).offsetHeight + this.props.topOffset;
-    this.setState({topOffset})
   }
 
   componentDidUpdate(prevProps, prevState){
-    if(this.state.isOpen && this.state.isOpen != prevState.isOpen) this.calculateHeights();
+    if(this.state.isOpen && this.state.isOpen !== prevState.isOpen) this.calculateDimensions();
   }
 
   toggle = () => {
-    this.setState({isOpen: !this.state.isOpen})
+    this.setState({isOpen: !this.state.isOpen});
   }
 
-  calculateHeights() {
-    if(!this.state.isOpen) return true
+  calculateDimensions() {
     let toggleButton = React.findDOMNode(this.refs.toggleButton)
     let popover = React.findDOMNode(this.refs.popover)
 
@@ -55,28 +51,26 @@ export default class Popover extends React.Component {
     let popoverHeight = popover.offsetHeight;
     let popoverWidth = popover.offsetWidth;
 
-    let topOffset = this.calculateTopOffset()
-    let leftOffset = this.calculateLeftOffset()
+    let topOffset = this.calculateTopOffset(popoverHeight, buttonHeight);
+    let leftOffset = this.calculateLeftOffset(popoverWidth, buttonWidth);
 
     this.setState({
-      buttonHeight,
       popoverHeight,
-      buttonWidth,
       popoverWidth,
       topOffset,
       leftOffset
     });
   }
 
-  calculateTopOffset() {
+  calculateTopOffset(popoverHeight, buttonHeight) {
     let offset = '0px';
 
     switch(this.props.position) {
       case 'top':
-        offset = `-${this.state.buttonHeight + this.props.topOffset}`;
+        offset = `-${popoverHeight + this.props.topOffset}`;
         break;
       case 'bottom':
-        offset = this.state.buttonHeight + this.props.topOffset;
+        offset = buttonHeight + this.props.topOffset;
         break;
       case 'left':
         offset = this.props.topOffset;
@@ -91,7 +85,7 @@ export default class Popover extends React.Component {
     return offset;
   }
 
-  calculateLeftOffset() {
+  calculateLeftOffset(popoverWidth, buttonWidth) {
     let offset = '0px';
 
     switch(this.props.position) {
@@ -102,19 +96,19 @@ export default class Popover extends React.Component {
         offset = this.props.leftOffset;
         break;
       case 'left':
-        offset = `-${this.state.popoverWidth + this.props.leftOffset}`;
+        offset = `-${popoverWidth + this.props.leftOffset}`;
         break;
       case 'right':
-        offset = this.state.buttonWidth + this.props.leftOffset;
+        offset = buttonWidth + this.props.leftOffset;
         break;
       default:
         offset = 0;
     }
-
     return offset;
   }
 
   render() {
+    console.log(this.state);
     if(this.props.toggleButton){
       var toggleButton = React.cloneElement(this.props.toggleButton, {
         ref: 'toggleButton',

@@ -108,7 +108,6 @@ export default class Popover extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     if(this.props.toggleButton){
       var toggleButton = React.cloneElement(this.props.toggleButton, {
         ref: 'toggleButton',

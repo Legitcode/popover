@@ -33,6 +33,8 @@ export default class Popover extends React.Component {
         if(this.state.isOpen == true) this.setState({isOpen: false})
       });
     }
+    let topOffset = React.findDOMNode(this.refs.toggleButton).offsetHeight + this.props.topOffset;
+    this.setState({topOffset})
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -45,15 +47,24 @@ export default class Popover extends React.Component {
 
   calculateHeights() {
     if(!this.state.isOpen) return true
-    this.buttonHeight = React.findDOMNode(this.refs.toggleButton).offsetHeight;
-    this.buttonWidth = React.findDOMNode(this.refs.toggleButton).offsetWidth;
+    let toggleButton = React.findDOMNode(this.refs.toggleButton)
+    let popover = React.findDOMNode(this.refs.popover)
 
-    this.popoverHeight = React.findDOMNode(this.refs.popover).offsetHeight;
-    this.popoverWidth = React.findDOMNode(this.refs.popover).offsetWidth;
+    let buttonHeight = toggleButton.offsetHeight;
+    let buttonWidth = toggleButton.offsetWidth;
+    let popoverHeight = popover.offsetHeight;
+    let popoverWidth = popover.offsetWidth;
+
+    let topOffset = this.calculateTopOffset()
+    let leftOffset = this.calculateLeftOffset()
 
     this.setState({
-      topOffset: this.calculateTopOffset(),
-      leftOffset: this.calculateLeftOffset()
+      buttonHeight,
+      popoverHeight,
+      buttonWidth,
+      popoverWidth,
+      topOffset,
+      leftOffset
     });
   }
 
@@ -62,16 +73,16 @@ export default class Popover extends React.Component {
 
     switch(this.props.position) {
       case 'top':
-        offset = `-${this.popoverHeight + this.props.topOffset}px`;
+        offset = `-${this.state.buttonHeight + this.props.topOffset}`;
         break;
       case 'bottom':
-        offset = `${this.buttonHeight + this.props.topOffset}px`;
+        offset = this.state.buttonHeight + this.props.topOffset;
         break;
       case 'left':
-        offset = `${this.props.topOffset}px`;
+        offset = this.props.topOffset;
         break;
       case 'right':
-        offset = `${this.props.topOffset}px`;
+        offset = this.props.topOffset;
         break;
       default:
         offset = 0;
@@ -85,16 +96,16 @@ export default class Popover extends React.Component {
 
     switch(this.props.position) {
       case 'top':
-        offset = `${this.props.leftOffset}px`;
+        offset = `-${this.props.leftOffset}`;
         break;
       case 'bottom':
-        offset = `${this.props.leftOffset}px`;
+        offset = this.props.leftOffset;
         break;
       case 'left':
-        offset = `-${this.popoverWidth + this.props.leftOffset}px`;
+        offset = `-${this.state.popoverWidth + this.props.leftOffset}`;
         break;
       case 'right':
-        offset = `${this.buttonWidth + this.props.leftOffset}px`;
+        offset = this.state.buttonWidth + this.props.leftOffset;
         break;
       default:
         offset = 0;

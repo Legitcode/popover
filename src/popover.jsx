@@ -28,7 +28,6 @@ export default class Popover extends React.Component {
 
     if(this.props.closeOnOuterClick !== false){
       document.addEventListener('click', (ev) => {
-        if(ev.target.dataset['popover']) return ev.stopImmediatePropagation();
         if(this.state.isOpen == true) this.setState({isOpen: false})
       });
     }
@@ -38,7 +37,13 @@ export default class Popover extends React.Component {
     if(this.state.isOpen && this.state.isOpen !== prevState.isOpen) this.calculateDimensions();
   }
 
-  toggle = () => {
+  toggle = (ev) => {
+    if (ev.stopImmediatePropagation) {
+      ev.stopImmediatePropagation();
+    } else {
+      ev.nativeEvent.stopImmediatePropagation();
+    }
+
     this.setState({isOpen: !this.state.isOpen});
   }
 
@@ -111,7 +116,6 @@ export default class Popover extends React.Component {
     if(this.props.toggleButton){
       var toggleButton = React.cloneElement(this.props.toggleButton, {
         ref: 'toggleButton',
-        'data-popover': true,
         onClick: this.toggle
       });
     }
@@ -120,7 +124,6 @@ export default class Popover extends React.Component {
         <div
           style={{display: 'none'}}
           onClick={this.toggle}
-          data-popover="true"
           ref="toggleButton"
         />
       )

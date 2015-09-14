@@ -18,15 +18,9 @@ export default class Expandable extends React.Component {
   }
 
   componentDidMount() {
-    let submitButton = React.findDOMNode(this.refs.submit);
-
-    submitButton.addEventListener('click', (ev) => {
-      this.onSubmit(ev);
-    });
   }
 
   onSubmit(ev) {
-    console.log(ev);
     let newInputSize = this.state.size == "small" ? "500px" : "100px",
         newSize = this.state.size == "small" ? "big" : "small";
 
@@ -44,6 +38,7 @@ export default class Expandable extends React.Component {
 
   render() {
     let toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>,
+        submitButton = <button ref='submit' className='btn btn-primary'>Toggle Size</button>,
         inputStyles = { width: this.state.inputSize };
 
     return (
@@ -59,7 +54,7 @@ export default class Expandable extends React.Component {
           <div className='form'>
             <label>Foo</label>
             <input type='text' className='form-control' style={inputStyles} ref='input'/>
-            <button ref='submit' className='btn btn-primary'>Toggle Size</button>
+            { submitButton }
           </div>
         </Popover>
       </div>

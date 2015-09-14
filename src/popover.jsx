@@ -28,6 +28,7 @@ export default class Popover extends React.Component {
 
     if(this.props.closeOnOuterClick !== false){
       document.addEventListener('click', (ev) => {
+        if(this.props.stopPropagation === true) return ev.stopPropagation();
         if(this.state.isOpen == true) this.setState({isOpen: false})
       });
     }
@@ -139,7 +140,7 @@ export default class Popover extends React.Component {
           <section
             className={`popover-content ${this.props.position} show`}
             style={contentStyles}
-            onClick={this.toggle}
+            onClick={this.props.stopPropagation ? null : this.toggle}
             ref='popover'>
             {this.props.children}
           </section>

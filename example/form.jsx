@@ -16,15 +16,9 @@ export default class Form extends React.Component {
   }
 
   componentDidMount() {
-    let submitButton = React.findDOMNode(this.refs.submit);
-
-    submitButton.addEventListener('click', (ev) => {
-      this.onSubmit(ev);
-    });
   }
 
   onSubmit() {
-    console.log("CLICK!");
     let input = React.findDOMNode(this.refs.input);
     console.log(input.value);
   }
@@ -39,6 +33,7 @@ export default class Form extends React.Component {
     return (
       <div className="container">
         <Popover
+          stopPropagation={true}
           toggleButton={toggleButton}
           handleClick={this.toggleMenu}
           isOpen={this.state.isOpen}

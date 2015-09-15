@@ -25,20 +25,31 @@ export default class Popover extends React.Component {
 
   componentDidMount() {
     if(this.state.isOpen) this.calculateDimensions();
-
     if(this.props.closeOnOuterClick !== false){
-      document.addEventListener('click', (ev) => {
-        if(this.props.stopPropagation === true) return ev.stopPropagation();
-        if(this.state.isOpen == true) this.setState({isOpen: false})
-      });
+      document.addEventListener('click', this.globalClick);
     }
+  }
+  componentWillUnmount(){
+    document.removeEventListener('click', this.globalClick);
   }
 
   componentDidUpdate(prevProps, prevState){
     if(this.state.isOpen && this.state.isOpen !== prevState.isOpen) this.calculateDimensions();
   }
 
-  toggle = (ev) => {
+  globalClick = () => {
+    if(this.state.isOpen == true) this.setState({isOpen: false})
+  }
+
+  handleClick = (ev) => {
+    if (ev.stopImmediatePropagation) {
+      ev.stopImmediatePropagation();
+    } else {
+      ev.nativeEvent.stopImmediatePropagation();
+    }
+  }
+
+  toggleButton = (ev) => {
     if (ev.stopImmediatePropagation) {
       ev.stopImmediatePropagation();
     } else {
@@ -117,14 +128,14 @@ export default class Popover extends React.Component {
     if(this.props.toggleButton){
       var toggleButton = React.cloneElement(this.props.toggleButton, {
         ref: 'toggleButton',
-        onClick: this.toggle
+        onClick: this.toggleButton
       });
     }
     else {
       var toggleButton = (
         <div
           style={{display: 'none'}}
-          onClick={this.toggle}
+          onClick={this.toggleButton}
           ref="toggleButton"
         />
       )
@@ -140,7 +151,7 @@ export default class Popover extends React.Component {
           <section
             className={`popover-content ${this.props.position} show`}
             style={contentStyles}
-            onClick={this.props.stopPropagation ? null : this.toggle}
+            onClick={this.handleClick}
             ref='popover'>
             {this.props.children}
           </section>

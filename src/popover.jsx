@@ -48,7 +48,7 @@ export default class Popover extends React.Component {
     this.setState({isOpen: !this.state.isOpen});
   }
 
-  calculateDimensions() {
+  calculateDimensions = () => {
     let toggleButton = React.findDOMNode(this.refs.toggleButton)
     let popover = React.findDOMNode(this.refs.popover)
 

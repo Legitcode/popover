@@ -65,7 +65,7 @@ menus, forms, or just for informational purposes.
       <td>Optional</td>
       <td>The number of pixels to offset the popover from the left (should be negative for right justified popovers)</td>
       <td>Any integer</td>
-    <tr>
+    </tr>
     <tr>
       <td>topOffset</td>
       <td>Options</td>

@@ -155,7 +155,7 @@ export default class Popover extends React.Component {
             ref='popover'>
             {this.props.children}
           </section>
-          : null}
+          : <section></section>}
       </div>
     )
   }

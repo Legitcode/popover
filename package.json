@@ -1,6 +1,6 @@
 {
   "name": "reactable-popover",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Popovers for React",
   "main": "./lib/popover.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "webpack-dev-server": "^1.9.0"
   },
   "peerDependencies": {
-    "react": "0.14.2"
+    "react": "^0.14.6"
   },
   "optionalDependencies": {},
   "engines": {

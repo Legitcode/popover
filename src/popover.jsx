@@ -1,12 +1,24 @@
-import React from 'react'
+import React, { PropTypes, Component } from "react"
+import ReactDOM from "react-dom"
 
-export default class Popover extends React.Component {
+export default class Popover extends Component {
+  static propTypes = {
+    className: PropTypes.string,
+    closeOnOuterClick: PropTypes.bool,
+    horizontalJustify: PropTypes.oneOf(["left", "right"]),
+    isOpen: PropTypes.bool,
+    leftOffset: React.PropTypes.number,
+    position: PropTypes.oneOf(["top", "bottom", "left", "right"]),
+    toggleButton: PropTypes.node.isRequired,
+    topOffset: PropTypes.number
+  }
+
   static defaultProps = {
     toggleButton: null,
-    position: 'bottom',
+    position: "bottom",
     topOffset: 10,
     leftOffset: 0,
-    horizontalJustify: 'left'
+    horizontalJustify: "left"
   }
 
   constructor(props) {
@@ -19,143 +31,163 @@ export default class Popover extends React.Component {
     }
   }
 
-  componentWillReceiveProps(props){
-    if(props.isOpen != this.state.isOpen) this.setState({isOpen: props.isOpen})
-  }
-
   componentDidMount() {
     if(this.state.isOpen) this.calculateDimensions()
     if(this.props.closeOnOuterClick !== false){
-      document.addEventListener('click', this.globalClick)
+      document.addEventListener("click", this.globalClick)
     }
   }
-  componentWillUnmount(){
-    document.removeEventListener('click', this.globalClick)
+
+  componentWillReceiveProps(props){
+    if(props.isOpen != this.state.isOpen) this.setState({ isOpen: props.isOpen })
   }
 
   componentDidUpdate(prevProps, prevState){
     if(this.state.isOpen && this.state.isOpen !== prevState.isOpen) this.calculateDimensions()
   }
 
-  globalClick = () => {
-    if(this.state.isOpen == true) this.setState({isOpen: false})
-  }
-
-  handleClick = (ev) => {
-    if (ev.stopImmediatePropagation) {
-      ev.stopImmediatePropagation()
-    } else {
-      ev.nativeEvent.stopImmediatePropagation()
-    }
-  }
-
-  toggleButton = (ev) => {
-    if (ev.stopImmediatePropagation) {
-      ev.stopImmediatePropagation()
-    } else {
-      ev.nativeEvent.stopImmediatePropagation()
-    }
-
-    this.setState({isOpen: !this.state.isOpen})
+  componentWillUnmount(){
+    document.removeEventListener("click", this.globalClick)
   }
 
   calculateDimensions = () => {
-    let toggleButton = React.findDOMNode(this.refs.toggleButton)
-    let popover = React.findDOMNode(this.refs.popover)
+    const toggleButton = ReactDOM.findDOMNode(this.refs.toggleButton)
+    const popover = ReactDOM.findDOMNode(this.refs.popover)
 
-    let buttonHeight = toggleButton.offsetHeight
-    let buttonWidth = toggleButton.offsetWidth
-    let popoverHeight = popover.offsetHeight
-    let popoverWidth = popover.offsetWidth
+    const buttonHeight = toggleButton.offsetHeight
+    const buttonWidth = toggleButton.offsetWidth
+    const popoverHeight = popover.offsetHeight
+    const popoverWidth = popover.offsetWidth
 
-    let topOffset = this.calculateTopOffset(popoverHeight, buttonHeight)
-    let leftOffset = this.calculateLeftOffset(popoverWidth, buttonWidth)
+    const topOffset = this.calculateTopOffset(popoverHeight, buttonHeight)
+    const leftOffset = this.calculateLeftOffset(popoverWidth, buttonWidth)
 
     this.setState({
+      leftOffset,
       popoverHeight,
       popoverWidth,
-      topOffset,
-      leftOffset
+      topOffset
     })
   }
 
   calculateTopOffset(popoverHeight, buttonHeight) {
-    let offset = '0px'
+    let offset
 
     switch(this.props.position) {
-      case 'top':
+      case "top":
         offset = `-${popoverHeight + this.props.topOffset}`
         break
-      case 'bottom':
+      case "bottom":
         offset = buttonHeight + this.props.topOffset
         break
-      case 'left':
+      case "left":
         offset = this.props.topOffset
         break
-      case 'right':
+      case "right":
         offset = this.props.topOffset
         break
       default:
         offset = 0
     }
 
-    return offset
+    return `${offset}px`
   }
 
   calculateLeftOffset(popoverWidth, buttonWidth) {
-    let offset = '0px'
+    let offset
 
     switch(this.props.position) {
-      case 'top':
+      case "top":
         offset = this.props.leftOffset
         break
-      case 'bottom':
+      case "bottom":
         offset = this.props.leftOffset
         break
-      case 'left':
+      case "left":
         offset = `-${popoverWidth + this.props.leftOffset}`
         break
-      case 'right':
+      case "right":
         offset = buttonWidth + this.props.leftOffset
         break
       default:
         offset = 0
     }
-    return offset
+
+    return `${offset}px`
   }
 
-  render() {
+  getContentStyles() {
+    const contentStyles = { top: this.state.topOffset }
+    contentStyles[this.props.horizontalJustify] = this.state.leftOffset
+
+    return contentStyles
+  }
+
+  globalClick = () => {
+    if(this.state.isOpen == true) this.setState({ isOpen: false })
+  }
+
+  handleContentClick = (ev) => {
+    if(ev.stopImmediatePropagation) {
+      ev.stopImmediatePropagation()
+    } else {
+      ev.nativeEvent.stopImmediatePropagation()
+    }
+  }
+
+  handleToggleButtonClick = (ev) => {
+    if(ev.stopImmediatePropagation) {
+      ev.stopImmediatePropagation()
+    } else {
+      ev.nativeEvent.stopImmediatePropagation()
+    }
+
+    this.setState({ isOpen: !this.state.isOpen })
+  }
+
+  renderPopoverContentSection() {
+    if(!this.state.isOpen) return <section></section>
+
+    return (
+      <section
+        className={ `popover-content ${this.props.position} show` }
+        style={ this.getContentStyles() }
+        onClick={ this.handleContentClick }
+        ref="popover"
+      >
+        { this.props.children }
+      </section>
+    )
+  }
+
+  renderToggleButton() {
+    let button
+
+    const defaultButtonProps = {
+      onClick: this.handleToggleButtonClick,
+      ref: "toggleButton"
+    }
+
     if(this.props.toggleButton){
-      var toggleButton = React.cloneElement(this.props.toggleButton, {
-        ref: 'toggleButton',
-        onClick: this.toggleButton
-      })
+      button = React.cloneElement(this.props.toggleButton, defaultButtonProps)
     }
     else {
-      var toggleButton = (
+      button = (
         <div
-          style={{display: 'none'}}
-          onClick={this.toggleButton}
-          ref="toggleButton"
+          { ...defaultButtonProps }
+          style={ { display: "none" } }
         />
       )
     }
 
-    let contentStyles = { top: this.state.topOffset }
-    contentStyles[this.props.horizontalJustify] = this.state.leftOffset
+    return button
+  }
 
+  render() {
     return (
-      <div className={`popover-menu ${this.props.className || ''}`}>
-        {toggleButton}
-        {this.state.isOpen ?
-          <section
-            className={`popover-content ${this.props.position} show`}
-            style={contentStyles}
-            onClick={this.handleClick}
-            ref='popover'>
-            {this.props.children}
-          </section>
-          : <section></section>}
+      <div className={ `popover-menu ${this.props.className || ""}` }>
+        { this.renderToggleButton() }
+        { this.renderPopoverContentSection() }
       </div>
     )
   }

@@ -1,9 +1,9 @@
-"use strict";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import Popover from '../src/popover.jsx';
+import '../src/css/default.scss';
 
-import React from 'react';
-import Popover from '../src/popover';
-
-export default class Form extends React.Component {
+export default class Form extends Component {
   constructor(props) {
     super(props);
 
@@ -11,16 +11,14 @@ export default class Form extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
 
-  componentDidMount() {
-  }
-
   onSubmit() {
-    let input = React.findDOMNode(this.refs.input);
-    console.log(input.value);
+    const input = ReactDOM.findDOMNode(this.refs.input);
+
+    alert(`${input.value} submitted!`);
   }
 
   toggleMenu(isOpen) {
@@ -28,28 +26,34 @@ export default class Form extends React.Component {
   }
 
   render() {
-    let toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>;
+    const toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>;
 
     return (
       <div className="container">
         <Popover
-          stopPropagation={true}
+          stopPropagation
           toggleButton={toggleButton}
           handleClick={this.toggleMenu}
           isOpen={this.state.isOpen}
           leftOffset={10}
-          position='left'>
+          position="left"
+        >
 
-          <div className='form'>
+          <div className="form">
             <label>Foo</label>
-            <input type='text' className='form-control' ref='input'/>
-            <button ref='submit' className='btn btn-primary'>Submit</button>
+            <input type="text" className="form-control" ref="input" />
+            <button
+              ref="submit"
+              className="btn btn-primary"
+              onClick={this.onSubmit}
+            >
+              Submit
+            </button>
           </div>
         </Popover>
       </div>
-    )
+    );
   }
 }
 
-require('../src/css/default.scss');
-React.render(<Form />, document.getElementById('react'))
+ReactDOM.render(<Form />, document.getElementById('react'));

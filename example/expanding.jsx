@@ -1,9 +1,9 @@
-"use strict";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import Popover from '../src/popover.jsx';
+import '../src/css/default.scss';
 
-import React from 'react';
-import Popover from '../src/popover';
-
-export default class Expandable extends React.Component {
+export default class Expandable extends Component {
   constructor(props) {
     super(props);
 
@@ -12,24 +12,26 @@ export default class Expandable extends React.Component {
 
     this.state = {
       isOpen: false,
-      inputSize: "100px",
-      size: "small"
+      inputSize: '100px',
+      size: 'small',
     };
   }
 
   componentDidMount() {
   }
 
-  onSubmit(ev) {
-    let newInputSize = this.state.size == "small" ? "500px" : "100px",
-        newSize = this.state.size == "small" ? "big" : "small";
+  onSubmit() {
+    const input = ReactDOM.findDOMNode(this.refs.input);
+
+    const newInputSize = input.value === 'small' ? '500px' : '100px';
+    const newSize = input.value === 'small' ? 'big' : 'small';
 
     this.setState({
       inputSize: newInputSize,
-      size: newSize
+      size: newSize,
     });
 
-    this.refs.popover.calculateHeights();
+    this.refs.popover.calculateDimensions();
   }
 
   toggleMenu(isOpen) {
@@ -37,9 +39,9 @@ export default class Expandable extends React.Component {
   }
 
   render() {
-    let toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>,
-        submitButton = <button ref='submit' className='btn btn-primary'>Toggle Size</button>,
-        inputStyles = { width: this.state.inputSize };
+    const toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>;
+    const submitButton = <button ref="submit" className="btn btn-primary">Toggle Size</button>;
+    const inputStyles = { width: this.state.inputSize };
 
     return (
       <div className="container">
@@ -48,19 +50,24 @@ export default class Expandable extends React.Component {
           handleClick={this.toggleMenu}
           isOpen={this.state.isOpen}
           leftOffset={10}
-          ref='popover'
-          position='left'>
+          ref="popover"
+          position="left"
+        >
 
-          <div className='form'>
+          <div className="form">
             <label>Foo</label>
-            <input type='text' className='form-control' style={inputStyles} ref='input'/>
-            { submitButton }
+            <input
+              type="text"
+              className="form-control"
+              style={inputStyles}
+              ref="input"
+            />
+            {submitButton}
           </div>
         </Popover>
       </div>
-    )
+    );
   }
 }
 
-require('../src/css/default.scss');
-React.render(<Expandable />, document.getElementById('react'))
+ReactDOM.render(<Expandable />, document.getElementById('react'));

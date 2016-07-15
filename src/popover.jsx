@@ -38,7 +38,11 @@ export default class Popover extends React.Component {
   }
 
   globalClick = () => {
-    if(this.state.isOpen == true) this.setState({isOpen: false})
+    if (this.props.isOpen) {
+      if (this.props.isOpen != this.state.isOpen) this.setState({ isOpen: this.props.isOpen });
+    } else {
+      if (this.state.isOpen == true) this.setState({ isOpen: false });
+    }
   }
 
   handleClick = (ev) => {
@@ -125,10 +129,10 @@ export default class Popover extends React.Component {
   }
 
   render() {
-    if(this.props.toggleButton){
+    if (this.props.toggleButton){
       var toggleButton = React.cloneElement(this.props.toggleButton, {
         ref: 'toggleButton',
-        onClick: this.toggleButton
+        onClick: this.props.toggleButton.props.onClick || this.toggleButton
       })
     }
     else {

@@ -1,0 +1,7 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "rules": {
+    "react/prop-types": [2, { "ignore": ["children"] }]
+  }
+}

@@ -1,9 +1,9 @@
-"use strict";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import Popover from '../src/popover.jsx';
+import '../src/css/default.scss';
 
-import React from 'react';
-import Popover from '../src/popover';
-
-export default class Basic extends React.Component {
+export default class Basic extends Component {
   constructor(props) {
     super(props);
 
@@ -12,7 +12,7 @@ export default class Basic extends React.Component {
 
     this.state = {
       isOpen: false,
-      position: 'bottom'
+      position: 'bottom',
     };
   }
 
@@ -20,13 +20,13 @@ export default class Basic extends React.Component {
     this.setState({ isOpen: !isOpen });
   }
 
-  changePosition(ev) {
-    let position = React.findDOMNode(ev.currentTarget).value;
-    this.setState({ position: position });
+  changePosition(event) {
+    const position = ReactDOM.findDOMNode(event.currentTarget).value;
+    this.setState({ position });
   }
 
   render() {
-    let toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>
+    const toggleButton = <button className="btn btn-lrg btn-success">Toggle Menu</button>;
 
     return (
       <div className="container">
@@ -35,14 +35,15 @@ export default class Basic extends React.Component {
           <option value="top">Top</option>
           <option value="left">Left</option>
           <option value="right">Right</option>
-        </select><br/><br/>
+        </select><br /><br />
 
         <Popover
           toggleButton={toggleButton}
           handleClick={this.toggleMenu}
           isOpen={this.state.isOpen}
           position={this.state.position}
-          leftOffset={10}>
+          leftOffset={10}
+        >
 
           <ul>
             <li>Menu Item One</li>
@@ -51,9 +52,8 @@ export default class Basic extends React.Component {
           </ul>
         </Popover>
       </div>
-    )
+    );
   }
 }
 
-require('../src/css/default.scss');
-React.render(<Basic />, document.getElementById('react'));
+ReactDOM.render(<Basic />, document.getElementById('react'));
